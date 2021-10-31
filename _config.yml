@@ -20,7 +20,7 @@
 
 
 baseurl: "/" # the subpath of your site, e.g. /blog
-url: "https://jekyll-garden.github.io/" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://dobrica.sh/" # the base hostname & protocol for your site, e.g. http://example.com
 
 #######################################################################
 # Settings related to the Header and your About page go here,such as 
@@ -31,7 +31,7 @@ url: "https://jekyll-garden.github.io/" # the base hostname & protocol for your 
 heading: Digital Garden # Change this 
 copyright:  
   year: 2021
-  msg: Your Name # This is a mandatory attribute for copyright to be displayed ; If deleting this, edit at footer layout.
+  msg: Dobrica Savic # This is a mandatory attribute for copyright to be displayed ; If deleting this, edit at footer layout.
 
 
 #####################################################################
