@@ -2,3 +2,4 @@
 	path = _notes/Public
 	url = https://github.com/hpdobrica/digital-garden-public.git
 	branch = main
+	recurse = true
