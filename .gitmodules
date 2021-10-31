@@ -1,4 +1,4 @@
 [submodule "_notes/Public"]
 	path = _notes/Public
-	url = git@github.com:hpdobrica/digital-garden-public.git
+	url = https://github.com/hpdobrica/digital-garden-public.git
 	branch = main
