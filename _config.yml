@@ -28,7 +28,7 @@ url: "https://dobrica.sh/" # the base hostname & protocol for your site, e.g. ht
 # your social media links etc
 #######################################################################
 
-heading: Digital Garden # Change this 
+heading: Dobrica's Digital Garden # Change this 
 copyright:  
   year: 2021
   msg: Dobrica Savic # This is a mandatory attribute for copyright to be displayed ; If deleting this, edit at footer layout.
