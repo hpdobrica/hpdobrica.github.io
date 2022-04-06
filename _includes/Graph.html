@@ -1,0 +1,62 @@
+<div id="sigma-container" class="column is-6" style="background-color:#222222;height:600px;"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/graphology/0.24.1/graphology.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/2.2.0/sigma.min.js"></script>
+<script
+  type="text/javascript"
+  src="/assets/js/vendor/graphology-library.min.js"
+></script>
+<script>
+  const container = document.getElementById('sigma-container')
+  const graph = new graphology.Graph()
+
+  fetch('/assets/js/SearchData.json')
+    .then((data) => {
+      return data.json()
+    })
+    .then((data) => {
+      console.log(data)
+      Object.keys(data).forEach((key) => {
+        graph.addNode(data[key].title, {
+          label: data[key].title,
+          url: data[key].url,
+          color: 'white',
+          x: 0,
+          y: 0,
+        })
+        console.log('added node', data[key].title)
+      })
+
+      const linkRegex = /\[\[([a-zA-Z0-9 ]*)\]\]/g
+
+      Object.keys(data).forEach((key) => {
+        regexResWithCG = [...data[key].content.matchAll(linkRegex)]
+        regexRes = regexResWithCG.map((resArr) => resArr[1])
+        regexRes.forEach((link) => {
+          console.log('connecting', data[key].title, 'and', link)
+          try {
+            graph.addEdge(data[key].title, link, {color: '#3f3f3f'})
+          } catch (err) {
+            console.log('edge not published', link)
+          }
+        })
+        graph.setNodeAttribute(data[key].title, 'size', regexRes.length/2+1)
+      })
+
+      graphologyLibrary.layout.circular.assign(graph)
+      const settings = graphologyLibrary.layoutForceAtlas2.inferSettings(graph);
+      graphologyLibrary.layoutForceAtlas2.assign(graph,{iterations: 600, settings})
+    })
+
+  const renderer = new Sigma(graph, container, {
+    renderLabels: false,
+  })
+
+  // Bind the events:
+  renderer.on('clickNode', function(e) {
+    console.log(e);
+    const url = graph.getNodeAttribute(e.node, "url") 
+    window.open(url)
+  });
+
+</script>
