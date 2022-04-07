@@ -1,4 +1,8 @@
-<div id="sigma-container" class="column is-6" style="background-color:#222222;height:600px;"></div>
+<div
+  id="sigma-container"
+  class="column is-6"
+  style="background-color: #262626; height: 600px"
+></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/graphology/0.24.1/graphology.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/2.2.0/sigma.min.js"></script>
@@ -6,57 +10,121 @@
   type="text/javascript"
   src="/assets/js/vendor/graphology-library.min.js"
 ></script>
+<script
+  type="text/javascript"
+  src="/assets/js//SigmaCustomRenderers.js"
+></script>
 <script>
   const container = document.getElementById('sigma-container')
   const graph = new graphology.Graph()
+  const linkRegex = /\[\[([a-zA-Z0-9 ]*)\]\]/g
 
+  const numberOfLinks = {}
+
+  // fetch('https://www.dobrica.sh/assets/js/SearchData.json')
   fetch('/assets/js/SearchData.json')
-    .then((data) => {
-      return data.json()
-    })
+    .then((res) => res.json())
     .then((data) => {
       console.log(data)
+
       Object.keys(data).forEach((key) => {
+        const label = data[key].title
+        const url = data[key].url
+
+        const linksWithCaptureGroups = [
+          ...data[key].content.matchAll(linkRegex),
+        ]
+        const links = linksWithCaptureGroups.map((resArr) => resArr[1])
+
+        links.forEach((link) => {
+          if (numberOfLinks.hasOwnProperty(link)) {
+            numberOfLinks[link]++
+          } else {
+            numberOfLinks[link] = 1
+          }
+        })
+
         graph.addNode(data[key].title, {
-          label: data[key].title,
-          url: data[key].url,
-          color: 'white',
+          label,
+          url,
+          color: '#FFFFFF',
           x: 0,
           y: 0,
+          // custom keys
+          links,
         })
         console.log('added node', data[key].title)
       })
 
-      const linkRegex = /\[\[([a-zA-Z0-9 ]*)\]\]/g
-
       Object.keys(data).forEach((key) => {
-        regexResWithCG = [...data[key].content.matchAll(linkRegex)]
-        regexRes = regexResWithCG.map((resArr) => resArr[1])
-        regexRes.forEach((link) => {
-          console.log('connecting', data[key].title, 'and', link)
+        const label = data[key].title
+        const url = data[key].url
+
+        const links = graph.getNodeAttribute(label, 'links')
+        links.forEach((link) => {
+          console.log('connecting', label, 'and', link)
           try {
-            graph.addEdge(data[key].title, link, {color: '#3f3f3f'})
+            graph.addEdge(label, link, { color: '#353535' })
           } catch (err) {
             console.log('edge not published', link)
           }
         })
-        graph.setNodeAttribute(data[key].title, 'size', regexRes.length/2+1)
+        graph.setNodeAttribute(label, 'size', numberOfLinks[label] / 2 + 1)
       })
 
       graphologyLibrary.layout.circular.assign(graph)
-      const settings = graphologyLibrary.layoutForceAtlas2.inferSettings(graph);
-      graphologyLibrary.layoutForceAtlas2.assign(graph,{iterations: 600, settings})
+      const settings = graphologyLibrary.layoutForceAtlas2.inferSettings(graph)
+      graphologyLibrary.layoutForceAtlas2.assign(graph, {
+        iterations: 600,
+        settings,
+      })
     })
 
   const renderer = new Sigma(graph, container, {
-    renderLabels: false,
+    //renderLabels: false,
+    labelColor: { color: '#E6E6E6' },
+    hoverRenderer: customDrawHover,
+    labelRenderer: customDrawLabel,
+
+    //custom props for custom renderers
+    labelHoverColor: '#353535',
+    labelShadowColor: '#18181C',
+  })
+
+  let hoveredNode
+
+  function setHoveredNode(node) {
+    if (node) {
+      hoveredNode = node
+    } else {
+      hoveredNode = undefined
+    }
+
+    // Refresh rendering:
+    renderer.refresh()
+  }
+
+  renderer.setSetting('edgeReducer', (edge, data) => {
+    const res = { ...data }
+
+    if (hoveredNode && graph.hasExtremity(edge, hoveredNode)) {
+      res.color = '#6D9EFF'
+    }
+
+    return res
   })
 
   // Bind the events:
-  renderer.on('clickNode', function(e) {
-    console.log(e);
-    const url = graph.getNodeAttribute(e.node, "url") 
+  renderer.on('clickNode', function (e) {
+    console.log(e)
+    const url = graph.getNodeAttribute(e.node, 'url')
     window.open(url)
-  });
+  })
 
+  renderer.on('enterNode', ({ node }) => {
+    setHoveredNode(node)
+  })
+  renderer.on('leaveNode', () => {
+    setHoveredNode(undefined)
+  })
 </script>
