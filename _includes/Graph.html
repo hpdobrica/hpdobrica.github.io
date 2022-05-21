@@ -17,7 +17,7 @@
 <script>
   const container = document.getElementById('sigma-container')
   const graph = new graphology.Graph()
-  const linkRegex = /\[\[([a-zA-Z0-9 ]*)\]\]/g
+  const linkRegex = /\[\[([a-zA-Z0-9 \-@_]*)\]\]/g
 
   const numberOfLinks = {}
 
@@ -53,7 +53,7 @@
           // custom keys
           links,
         })
-        console.log('added node', data[key].title)
+        console.log('added node with links', data[key].title, links)
       })
 
       Object.keys(data).forEach((key) => {
