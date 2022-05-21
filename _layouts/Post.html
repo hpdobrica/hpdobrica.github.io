@@ -52,7 +52,8 @@
     <meta content="{{ site.url }}{{ page.url }}" property="og:url">
     {%- endif -%}
 
-    <title>{{site.heading}}</title>
+    <!-- <title>{{site.heading}}</title> -->
+    <title>{{ page.title }} -- {{site.heading}}</title>
 
     <link rel="canonical" href="{{site.url}}{{page.url}}" />
     <link rel="apple-touch-icon" href="/assets/img/profile.png">
