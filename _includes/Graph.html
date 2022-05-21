@@ -21,8 +21,9 @@
 
   const numberOfLinks = {}
 
-  // fetch('https://www.dobrica.sh/assets/js/SearchData.json')
-  fetch('/assets/js/SearchData.json')
+
+  fetch('https://www.dobrica.sh/assets/js/SearchData.json')
+  // fetch('/assets/js/SearchData.json')
     .then((res) => res.json())
     .then((data) => {
       console.log(data)
@@ -30,6 +31,11 @@
       Object.keys(data).forEach((key) => {
         const label = data[key].title
         const url = data[key].url
+
+        if(isSourceNote(label)) {
+          console.log('ignoring source note', label)
+          return
+        }
 
         const linksWithCaptureGroups = [
           ...data[key].content.matchAll(linkRegex),
@@ -60,6 +66,10 @@
         const label = data[key].title
         const url = data[key].url
 
+        if(isSourceNote(label)) {
+          console.log('ignoring source note', label)
+          return
+        }
         const links = graph.getNodeAttribute(label, 'links')
         links.forEach((link) => {
           console.log('connecting', label, 'and', link)
@@ -127,4 +137,11 @@
   renderer.on('leaveNode', () => {
     setHoveredNode(undefined)
   })
+
+
+  function isSourceNote(label) {
+    const sourceTitlePrefixes = ['Book - ', 'Video - ', 'Podcast - ']
+
+    return sourceTitlePrefixes.some((prefix) => label.startsWith(prefix))
+  }
 </script>
