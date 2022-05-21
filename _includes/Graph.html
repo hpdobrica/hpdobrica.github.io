@@ -22,8 +22,8 @@
   const numberOfLinks = {}
 
 
-  fetch('https://www.dobrica.sh/assets/js/SearchData.json')
-  // fetch('/assets/js/SearchData.json')
+  // fetch('https://www.dobrica.sh/assets/js/SearchData.json')
+  fetch('/assets/js/SearchData.json')
     .then((res) => res.json())
     .then((data) => {
       console.log(data)
