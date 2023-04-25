@@ -37,6 +37,7 @@
         </svg>
         <h4>dobrica.sh</h4>  
       </a>
+      {%- if page.layout != "Pico8" -%}
       <div class="navbar-item navbar-dark-mode__mobile is-hidden-tablet" onclick="modeSwitcher()">
         <div class="buttons">
           <a class="button is-text">
@@ -46,6 +47,7 @@
           </a>
         </div>
       </div>
+      {%- endif -%}
       <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
