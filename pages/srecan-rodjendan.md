@@ -3,6 +3,6 @@
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
 layout: Pico8
-permalink: /ro-test
+permalink: /srecan-rodjendan
 p8_cart_name: ro
 ---
