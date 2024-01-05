@@ -66,7 +66,7 @@
     
         {%- assign replaced_content = content -%}
 
-        {%- assign replaced_content = replaced_content | replace: 'src="/Public/assets/', 'src="https://github.com/hpdobrica/digital-garden-public/blob/main/assets/' | append: github_base_url -%}
+        {%- assign replaced_content = replaced_content | replace: 'src="Public/assets/', 'src="https://github.com/hpdobrica/digital-garden-public/blob/main/assets/' | append: github_base_url -%}
         {%- assign replaced_content = replaced_content | replace: '.png"', '.png?raw=true"' -%}
         {%- assign replaced_content = replaced_content | replace: '.jpg"', '.jpg?raw=true"' -%}
         {%- assign replaced_content = replaced_content | replace: '.jpeg"', '.jpeg?raw=true"' -%}
